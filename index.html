@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Here Comes The Sun</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="api_calls.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+        <link rel="icon" type="image/png" href="sun.png">
+    </head>
+    
+    <body>
+        <center><img src="sun.png" alt="sun icon!" height="150px" /></center>
+        <div id="map"></div>
+
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxD8mtUyIFNAY-khfqvXv36fx4ZYekulE"></script>
+        <div id="whiteContainer">
+            <!-- Content Derived from loadInitialElements() function -->
+        </div>
+        <script>
+            $(document).ready(function() {
+                // Things to do when page loads
+               loadInitialElements();
+            });      
+
+
+        </script>
+    </body>
+</html>

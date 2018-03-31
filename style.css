@@ -1,0 +1,73 @@
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+
+#map {
+    height: 0%;
+    width: 0%;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat';
+    background-color: deepskyblue;
+}
+
+#whiteContainer {
+    width: 100%;
+    #border-radius: 5px;
+    position: absolute;
+    
+    
+    background-color: aliceblue;
+}
+
+#contentContainerInner {
+    width: 80%;
+}
+
+hr {
+    width: 30%;
+}
+
+#btn {
+    width: 95%;
+    background-color: orange;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#btn:hover {
+    background-color: darkorange;
+}
+
+#errorNoInputText {
+    font-size: 90%;
+    color: red;
+    padding: 5px;
+}
+
+#cityInput {
+    padding: 5px;
+    border-radius: 5px;
+    width: 95%;
+    font-size: 20px;
+    font-family: 'Montserrat';
+}
+
+#whereAreYouTable {
+   
+
+}
+
+#whereAreYouCell {
+ display: inline;
+    min-width: 100px;
+    
+}
+
+#cityInputCell {
+
+    align-content: right;
+}
