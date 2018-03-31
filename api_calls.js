@@ -1,3 +1,5 @@
+var pointsToMap = [];
+
 function loadInitialElements() {
     var pageHtmlString = '<center>' +
                 '<h1>Here Comes The Sun </h1>' +
@@ -92,12 +94,50 @@ function apiCall(url) {
                 data['name'] + ": " + weatherAtLocation + '</div><br /><br /></center>';
            //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
             $("#whiteContainer").html(successApiString)
+            
+            // Call for nearby places
+            // lon-left,lat-bottom,lon-right,lat-top,zoom
+            apiSearchNearbyWeather(myLocationLat, myLocationLong);
+            
         },
         error: function(err) {
         $("#errorNoInputText").html("location not found. Is it in the UK?")
         console.log('error:' + err)
         }
     })
+}
+
+function apiSearchNearbyWeather(lat, long) {
+    
+    
+    var url = 'http://api.openweathermap.org/data/2.5/box/city?bbox='+(long-3).toString()+','+(lat-3).toString()+','+(long+3).toString()+','+(lat+3).toString()+',20';
+    $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+        'APPID': 'd0478ac43e79cf1c6eb4adc5141a2966',
+        'units': 'metric'
+    },
+    success: function(data) {
+        var items;
+        console.log(data);
+        var returnLength = data['list'].length;
+        for(var i = 0; i < returnLength; i++) {
+            console.log(i + ': ' + data['list'][i]['weather'][0]['main']);
+            pointsToMap.push([data['list'][i]['coord']['Lat'],data['list'][i]['coord']['Long']])
+        }
+        displayMap(pointsToMap);
+    
+    
+        
+    },
+    error: function(err) {
+    $("#errorNoInputText").html("location not found. Is it in the UK?")
+    console.log('error:' + err)
+    }
+})
+    
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
