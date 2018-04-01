@@ -109,7 +109,7 @@ function apiSearchNearbyWeather(lat, long) {
     // 5 = ~1000
     // 10 = 2500
     // 20 = 5000, around 7 seconds
-    var ZOOM = 15;
+    var ZOOM = 3;
     var url = 'https://api.openweathermap.org/data/2.5/box/city?bbox='+
                                                                     (long-ZOOM).toString() +
                                                                     ','+(lat-ZOOM).toString() +','+
