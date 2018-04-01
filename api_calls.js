@@ -160,10 +160,12 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) {
     console.log("Displaying map!");
+    var googleMapsUrl = "https://www.google.com/maps/dir/?api=1&origin=" + latOne + "," + longOne + "&destination=" + latTwo + "," + longTwo;
     var successApiString = '<center><div id="contentContainerInner"><h1>Head to... ' + name + '!</h1>' +
                 '<h4>Distance: ' + distance.toFixed(2) + 'km\tMax Temp: ' + temp.toFixed(2) + 'C</h4>' +
                 '</div>' +
                 '<div style="height: 400px; width: 100%;"><div id="resultMap">Map go here</div></div>' +
+                '<br /><div id="btn" type="button" onclick="location.href=\'' + googleMapsUrl + '\';">Get Me There</div>' +
                 '<br /><div id="btn" type="button" onClick="loadInitialElements()">Back to Home</div><br />' +
                 '<br /><br /></center>';
            //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
