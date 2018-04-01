@@ -83,15 +83,14 @@ function apiCall(url) {
         },
         success: function(data) {
             var items;
-            console.log(data)
+            //console.log(data)
             // Log weather at currnet location
             var weatherAtLocation = data['weather'][0]['main'];
             var myLocationLat = data['coord']['lat'];
             var myLocationLong = data['coord']['lon'];
             // Change Page Content to Results
-            var successApiString = '<center><div id="contentContainerInner"><h1>Results</h1>' +
-                '<br /><br /><div id="btn" type="button" onClick="loadInitialElements()">Reset Page</div><br />' +
-                data['name'] + ": " + weatherAtLocation + '</div><br /><br /></center>';
+            var successApiString = '<center><div id="contentContainerInner"><h1>Loading...</h1>' +
+                '</div><br /><br /></center>';
            //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
             $("#whiteContainer").html(successApiString)
             
@@ -108,9 +107,18 @@ function apiCall(url) {
 }
 
 function apiSearchNearbyWeather(lat, long) {
-    
-    
-    var url = 'http://api.openweathermap.org/data/2.5/box/city?bbox='+(long-3).toString()+','+(lat-3).toString()+','+(long+3).toString()+','+(lat+3).toString()+',20';
+    // how large a radius?
+    // 3 returns around 300 results
+    // 5 = ~1000
+    // 10 = 2500
+    // 20 = 5000, around 7 seconds
+    var ZOOM = 5
+    var url = 'http://api.openweathermap.org/data/2.5/box/city?bbox='+
+                                                                    (long-ZOOM).toString() +
+                                                                    ','+(lat-ZOOM).toString() +','+
+                                                                    (long+ZOOM).toString() +','+ 
+                                                                    (lat+ZOOM).toString()+
+                                                                    ',20';
     $.ajax({
         url: url,
         method: 'GET',
@@ -123,11 +131,13 @@ function apiSearchNearbyWeather(lat, long) {
         var items;
         console.log(data);
         var returnLength = data['list'].length;
+        // Call function that finds nearest place with 'Clear' Weather
+        findNearestSunnySpot(data, lat, long);
         for(var i = 0; i < returnLength; i++) {
-            console.log(i + ': ' + data['list'][i]['weather'][0]['main']);
+            //console.log(i + ': ' + data['list'][i]['weather'][0]['main']);
             pointsToMap.push([data['list'][i]['coord']['Lat'],data['list'][i]['coord']['Long']])
         }
-        displayMap(pointsToMap);
+        //displayMap(pointsToMap);
     
     
         
@@ -146,4 +156,60 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                       'Error: The Geolocation service failed.' :
                       'Error: Your browser doesn\'t support geolocation.');
     //infoWindow.open(map);
+}
+
+function displayMap(latOne, longOne, latTwo, longTwo, name, distance) {
+    console.log("Displaying map!");
+    var successApiString = '<center><div id="contentContainerInner"><h1>Map</h1>' +
+                '<br /><br /><div id="btn" type="button" onClick="loadInitialElements()">Reset Page</div><br />' +
+                '</div><br /><br /></center>';
+           //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
+            $("#whiteContainer").html(successApiString)
+}
+
+function findNearestSunnySpot(weatherData, currentLat, currentLong) {
+    var clearSpotsArray = [];
+    // Create array of clear spots
+    // calc didstance from each one, find smallest
+    var numPlaces = weatherData['list'].length;
+    for(var i = 0; i < numPlaces; i++) {
+        if(weatherData['list'][i]['weather'][0]['main']=='Clear') {
+            console.log("found a clear spot! : ");
+            clearSpotsArray.push(i);
+            
+        }
+    }
+    console.log("array of index elements: " + clearSpotsArray);
+    console.log("first element: " + weatherData['list'][clearSpotsArray[0]]['name']);
+    var closestSunnySpot = clearSpotsArray[0]['name'];
+    
+    var closestDistance = distanceBetweenCoords(currentLat, currentLong, weatherData['list'][clearSpotsArray[0]]['coord']['Lat'],weatherData['list'][clearSpotsArray[0]]['coord']['Lon'])
+    for(i in clearSpotsArray) {
+        //console.log("i: " + clearSpotsArray[i]);
+        var latTwo = weatherData['list'][clearSpotsArray[i]]['coord']['Lat'];
+        //console.log("latTwo: " + latTwo);
+        var longTwo = weatherData['list'][clearSpotsArray[i]]['coord']['Lon'];
+        var newDistance = distanceBetweenCoords(currentLat, currentLong, latTwo, longTwo);
+        if (newDistance < closestDistance){
+            closestSunnySpot = i;
+            closestDistace = newDistance;            
+        }
+        
+    }
+    var closestPlaceName = weatherData['list'][closestSunnySpot]['name'];
+    var closestLat = weatherData['list'][closestSunnySpot]['coord']['Lat'];
+    var closestLong =  weatherData['list'][closestSunnySpot]['coord']['Lon'];
+    console.log("Closest sunny spot: " + closestPlaceName);
+    console.log("Distance: " + closestDistance)
+    displayMap(currentLat, currentLong, closestLat, closestLong, closestPlaceName, closestDistance);
+}
+
+function distanceBetweenCoords(lat1, lon1, lat2, lon2) {
+  var p = 0.017453292519943295;    // Math.PI / 180
+  var c = Math.cos;
+  var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+          c(lat1 * p) * c(lat2 * p) * 
+          (1 - c((lon2 - lon1) * p))/2;
+
+  return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
 }
