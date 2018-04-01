@@ -172,12 +172,27 @@ function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) 
 }
 
 function displayMap(latOne, longOne, latTwo, longTwo) {
+    var directionsService = new google.maps.DirectionsService;
+    var directionsDisplay = new google.maps.DirectionsRenderer;
     console.log("printing google map...");
   
       var map = new google.maps.Map(document.getElementById('resultMap'), {
-        center: {lat: -34.397, lng: 150.644},
+        center: {lat: latOne, lng: longOne},
         zoom: 8
       });
+    directionsDisplay.setMap(map);
+    
+    directionsService.route({
+      origin: {lat: latOne, lng: longOne},
+      destination: {lat: latTwo, lng: longTwo},
+      travelMode: 'DRIVING'
+    }, function(response, status) {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
+    });
 
   }
 //$("#resultMap").html("<h1>Map gonna go here!");
