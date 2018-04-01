@@ -152,12 +152,15 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) {
     console.log("Displaying map!");
+    var items = ['Taps Aff In', 'Sun\'s Out In', 'Head To', 'Clear Skies In', 'It\'s Marvellous In', 'It\'s Bloomin\' Lovely In', 'There\'s Blue Skies In', 'Get Yourself To', +
+                'Pack Your Bags And Head To'];
+    introString = items[Math.floor(Math.random()*items.length)]
     var googleMapsUrl = "https://www.google.com/maps/dir/?api=1&origin=" + latOne + "," + longOne + "&destination=" + latTwo + "," + longTwo;
-    var successApiString = '<center><div id="contentContainerInner"><h1>Head to... ' + name + '!</h1>' +
+    var successApiString = '<center><div id="contentContainerInner"><h1>' + introString + ' ' + name + '</h1>' +
                 '<h4>Distance: ' + distance.toFixed(2) + 'km\tMax Temp: ' + temp.toFixed(2) + 'C</h4>' +
                 '</div>' +
                 '<div style="height: 400px; width: 100%;"><div id="resultMap">Map go here</div></div>' +
-                '<br /><div id="btn" type="button" onclick="location.href=\'' + googleMapsUrl + '\';">Get Me There</div>' +
+                '<br /><div id="btn" type="button" onclick="location.href=\'' + googleMapsUrl + '\';">Take Me There</div>' +
                 '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
                 '<br /><br /></center></div>';
            //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
@@ -204,7 +207,7 @@ function findNearestSunnySpot(weatherData, currentLat, currentLong) {
             
         }
     }
-    console.log("array of index elements: " + clearSpotsArray);
+    
     if(clearSpotsArray.length < 1) {
         var failedSearchString = '<center><div id="contentcontainerInner"><h2>Search Error</h2>' +
             '<h4>There\'s just no sunshine anywhere today :( </h4></div>' +
