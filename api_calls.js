@@ -112,7 +112,7 @@ function apiSearchNearbyWeather(lat, long) {
     // 5 = ~1000
     // 10 = 2500
     // 20 = 5000, around 7 seconds
-    var ZOOM = 5
+    var ZOOM = 15
     var url = 'https://api.openweathermap.org/data/2.5/box/city?bbox='+
                                                                     (long-ZOOM).toString() +
                                                                     ','+(lat-ZOOM).toString() +','+
@@ -213,6 +213,7 @@ function findNearestSunnySpot(weatherData, currentLat, currentLong) {
         }
     }
     console.log("array of index elements: " + clearSpotsArray);
+    
     console.log("first element: " + weatherData['list'][clearSpotsArray[0]]['name']);
     var closestSunnySpot = clearSpotsArray[0]['name'];
     
