@@ -3,21 +3,23 @@
     height: 0%;
     width: 0%;
 }
-/* Optional: Makes the sample page fill the window. */
+
+
+
+
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
     font-family: 'Montserrat';
     background-color: deepskyblue;
+    font-size: 80%;
 }
 
 #whiteContainer {
     width: 100%;
-
-    position: absolute;
-    
-    
+    position: absolute;   
     background-color: aliceblue;
 }
 
@@ -61,11 +63,8 @@ hr {
 }
 
 #whereAreYouCell {
-
     min-width: 100px;
     vertical-align: middle;
-
-    
 }
 
 #cityInputCell {
@@ -82,11 +81,12 @@ hr {
     /* Settings for things larger than phones */
     #btn {
         width: 30%;
-
     }
     
     #whereAreYouTable {
     width: 33%;
-
 }
+    html, body {
+            font-size: 100%;
+    }
 }
