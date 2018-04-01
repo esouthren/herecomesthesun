@@ -71,3 +71,8 @@ hr {
 
     align-content: right;
 }
+
+#resultMap {
+    height: 100%;
+    width: 100%;
+}
