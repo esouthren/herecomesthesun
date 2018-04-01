@@ -157,7 +157,7 @@ function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) 
                 '<h4>Distance: ' + distance.toFixed(2) + 'km\tMax Temp: ' + temp.toFixed(2) + 'C</h4>' +
                 '</div>' +
                 '<div style="height: 300px; width: 100%;"><div id="resultMap">Map go here</div></div>' +
-                '<br /><div id="btn" type="button" onclick="location.href=\'' + googleMapsUrl + '\';">Take Me There</div>' +
+                '<br /><div id="btn" type="button" target="_blank" onclick="window.open(\'' + googleMapsUrl + '\',\'_blank\');">Take Me There</div>' +
                 '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
                 '<br /><br /></center></div>';
            //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
