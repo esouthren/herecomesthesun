@@ -1,6 +1,17 @@
-var pointsToMap = [];
+/* 
+
+Here Comes The Sun
+
+Where's my nearest sunshine and how do I get there?
+
+Thanks to https://openweathermap.org/ and https://developer.google.com
+
+For M x
+
+*/
 
 function loadInitialElements() {
+    // The initial HTML of the homepage
     var pageHtmlString = '<center>' +
                 '<h1>Here Comes The Sun </h1>' +
                 '<div id="contentContainerInner">' +
@@ -22,7 +33,7 @@ function loadInitialElements() {
 }
 
 function apiCallCheckSource(source) {
-    
+    // Are we calling the weather API with a searched location or current position co-ordinates?
     if(source=="myLocation") {
         var myLocation = $("#cityInput").val();
         console.log("My Location: " + myLocation);
@@ -33,41 +44,30 @@ function apiCallCheckSource(source) {
             var url = "https://api.openweathermap.org/data/2.5/weather?q=" + myLocation + ",uk"
             apiCall(url);
         }
-    }
-    
+    }    
     else if(source=="googleLocation") {
-        // Make call to google Api
+        // Make call to google Api to get current location
          if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-            };
-            /*
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
-            infoWindow.open(map);
-            map.setCenter(pos);
-            */
-            // Changing Text to show location
-            var stringLocation = (position.coords.latitude).toString() + ', ' + (position.coords.latitude).toString();
-            $("#location").html(stringLocation);   
-                    var url = "https://api.openweathermap.org/data/2.5/weather?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
-            console.log("calling google API with latitude: " + position.coords.latitude);
-        apiCall(url);
-        }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var url = "https://api.openweathermap.org/data/2.5/weather?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
+                console.log("calling google API with latitude: " + position.coords.latitude);
+                apiCall(url);
+            }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
             });
         } else {
         // Browser doesn't support Geolocation
         handleLocationError(false, infoWindow, map.getCenter());
         }
-}  
-}
-    
+    }  
+}    
 
 function apiCall(url) {
-
+    // Call Weather API with supplied URL
     console.log("Weather maps API Call...");
     
     $.ajax({
@@ -81,20 +81,17 @@ function apiCall(url) {
         success: function(data) {
             var items;
             //console.log(data)
-            // Log weather at currnet location
+            // Log weather at current location
             var weatherAtLocation = data['weather'][0]['main'];
             var myLocationLat = data['coord']['lat'];
             var myLocationLong = data['coord']['lon'];
-            // Change Page Content to Results
-            var successApiString = '<center><div id="contentContainerInner"><br /><br /><br /><br /><h1>Loading...</h1><br /><br />' +
+            // Change Page Content to Loading
+            var loadingHtmlString = '<center><div id="contentContainerInner"><br /><br /><br /><br /><h1>Loading...</h1><br /><br />' +
                 '</div><br /><br /></center>';
-           //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
-            $("#whiteContainer").html(successApiString)
+            $("#whiteContainer").html(loadingHtmlString);
             
-            // Call for nearby places
-            // lon-left,lat-bottom,lon-right,lat-top,zoom
-            apiSearchNearbyWeather(myLocationLat, myLocationLong);
-            
+            // API Call for nearby places
+            apiSearchNearbyWeather(myLocationLat, myLocationLong);            
         },
         error: function(err) {
         $("#errorNoInputText").html("location not found. Is it in the UK?")
@@ -131,28 +128,30 @@ function apiSearchNearbyWeather(lat, long) {
         // Call function that finds nearest place with 'Clear' Weather
         findNearestSunnySpot(data, lat, long);        
     },
-    error: function(err) {
-    $("#errorNoInputText").html("location not found. Is it in the UK?")
-    console.log('error:' + err)
-    }
-})
+        error: function(err) {
+            $("#errorNoInputText").html("location not found. Is it in the UK?")
+            console.log('error:' + err)
+        }
+    })
     
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    // If user does not activate geolocation, return error
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
                       'Error: The Geolocation service failed.' :
                       'Error: Your browser doesn\'t support geolocation.');
-    //infoWindow.open(map);
 }
 
 function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) {
+    // Display Results of Queries
     console.log("Displaying map!");
-    var items = ['Taps Aff In', 'Sun\'s Out In', 'Head To', 'Clear Skies In', 'It\'s Marvellous In', 'It\'s Bloomin\' Lovely In', 'There\'s Blue Skies In', 'Get Yourself To', +
-                'Pack Your Bags And Head To'];
+    var items = ['Taps Aff In', 'Sun\'s Out In', 'Head To', 'Clear Skies In', 'It\'s Marvellous In', 'It\'s Bloomin\' Lovely In', 'There\'s Blue Skies In', 'Get Yourself To','Pack Your Bags And Head To'];
     introString = items[Math.floor(Math.random()*items.length)]
+    // Create Google Maps directions URL
     var googleMapsUrl = "https://www.google.com/maps/dir/?api=1&origin=" + latOne + "," + longOne + "&destination=" + latTwo + "," + longTwo;
+    
     var successApiString = '<center><div id="contentContainerInner"><h1>' + introString + ' ' + name + '</h1>' +
                 '<h4>Distance: ' + distance.toFixed(2) + 'km\tMax Temp: ' + temp.toFixed(2) + 'C</h4>' +
                 '</div>' +
@@ -160,54 +159,28 @@ function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) 
                 '<br /><div id="btn" type="button" target="_blank" onclick="window.open(\'' + googleMapsUrl + '\',\'_blank\');">Take Me There</div>' +
                 '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
                 '<br /><br /></center></div>';
-           //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
-            $("#whiteContainer").html(successApiString)
-            displayMap(latOne, longOne, latTwo, longTwo);
+    
+    $("#whiteContainer").html(successApiString)
+    displayMap(latOne, longOne, latTwo, longTwo);
 }
 
 function displayMap(latOne, longOne, latTwo, longTwo) {
+    // Draw Map with directions from location to destination 
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
     console.log("printing google map...");
 
-    var icons = {
-          start: new google.maps.MarkerImage(
-           // URL
-           'sun.png',
-           // (width,height)
-           new google.maps.Size( 44, 32 ),
-           // The origin point (x,y)
-           new google.maps.Point( 0, 0 ),
-           // The anchor point (x,y)
-           new google.maps.Point( 22, 32 )
-          ),
-          end: new google.maps.MarkerImage(
-           // URL
-           'sun.png',
-           // (width,height)
-           new google.maps.Size( 44, 32 ),
-           // The origin point (x,y)
-           new google.maps.Point( 0, 0 ),
-           // The anchor point (x,y)
-           new google.maps.Point( 22, 32 )
-          )
-     };
-
-      var map = new google.maps.Map(document.getElementById('resultMap'), {
+    var map = new google.maps.Map(document.getElementById('resultMap'), {
         center: {lat: latOne, lng: longOne},
         zoom: 8
-         
-      });
-    var marker = new google.maps.Marker({
-    position:{lat: latTwo, lng: longTwo},
-    map: map,
-    title: 'Hello World',
-        icon: 'sunIcon.png'
-        
     });
-    
+    var marker = new google.maps.Marker({
+        position:{lat: latTwo, lng: longTwo},
+        map: map,
+        title: 'Hello World',
+        icon: 'sunIcon.png'
+    });
 
-    
     directionsDisplay.setMap(map);
     
     directionsService.route({
@@ -215,88 +188,75 @@ function displayMap(latOne, longOne, latTwo, longTwo) {
       destination: {lat: latTwo, lng: longTwo},
       travelMode: 'DRIVING'
     }, function(response, status) {
-      if (status === 'OK') {
-
-        directionsDisplay.setDirections(response);
-          
-        
-      } else {
-        window.alert('Directions request failed due to ' + status);
-      }
+          if (status === 'OK') {
+              directionsDisplay.setDirections(response);        
+          } else {
+              window.alert('Directions request failed due to ' + status);
+          }
     });
-
-
-  }
+}
 
 function drawErrorMessage() {
-            var failedSearchString = '<center><div id="contentcontainerInner"><h2>Search Error</h2>' +
-            '<h4>There\'s just no sunshine anywhere today :( </h4></div>' +
-            '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
-                '<br /><br /></center>';
-            $("#whiteContainer").html(failedSearchString);
+    var failedSearchString = '<center><div id="contentcontainerInner"><h2>Search Error</h2>' +
+    '<h4>There\'s just no sunshine anywhere today :( </h4></div>' +
+    '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
+        '<br /><br /></center>';
+    $("#whiteContainer").html(failedSearchString);
 }
 
 function findNearestSunnySpot(weatherData, currentLat, currentLong) {
+    // Find all the sunny spots, then find the nearest one
     var clearSpotsArray = [];
     // Create array of clear spots
-    // calc distance from each one, find smallest
     var numPlaces = weatherData['list'].length;
     for(var i = 0; i < numPlaces; i++) {
         if(weatherData['list'][i]['weather'][0]['main']=='Clear') {
-            //console.log("found a clear spot! : ");
-            clearSpotsArray.push(i);
-            
+            clearSpotsArray.push(i);            
         }
     }
-    
+    // didn't find any clear spots?
     if(clearSpotsArray.length < 1) {
         drawErrorMessage();
-
     }
-    else {
-    
-        
-        var closestSunnySpot = clearSpotsArray[0]['name'];
-        
+    else {   
+        var closestSunnySpot = clearSpotsArray[0]['name'];        
         var closestDistance = distanceBetweenCoords(currentLat, currentLong, weatherData['list'][clearSpotsArray[0]]['coord']['Lat'],weatherData['list'][clearSpotsArray[0]]['coord']['Lon'])
         for(i in clearSpotsArray) {
-            //console.log("i: " + clearSpotsArray[i]);
             var latTwo = weatherData['list'][clearSpotsArray[i]]['coord']['Lat'];
-            //console.log("latTwo: " + latTwo);
             var longTwo = weatherData['list'][clearSpotsArray[i]]['coord']['Lon'];
             var newDistance = distanceBetweenCoords(currentLat, currentLong, latTwo, longTwo);
 
-            if (newDistance < closestDistance){
+            if (newDistance < closestDistance) {
                 closestSunnySpot = i;
                 closestDistace = newDistance;            
             }
 
         }
         try {
-        var closestPlaceName = weatherData['list'][clearSpotsArray[closestSunnySpot]]['name'];
-        var closestLat = weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lat'];
-        var closestLong =  weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lon'];
-        var closestSunnyTemp = weatherData['list'][clearSpotsArray[closestSunnySpot]]['main']['temp_max'];
-        
+            var closestPlaceName = weatherData['list'][clearSpotsArray[closestSunnySpot]]['name'];
+            var closestLat = weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lat'];
+            var closestLong =  weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lon'];
+            var closestSunnyTemp = weatherData['list'][clearSpotsArray[closestSunnySpot]]['main']['temp_max'];
 
-        console.log("Closest sunny spot: " + closestPlaceName);
-        console.log("Distance: " + closestDistance);
-        console.log("Temp: " + closestSunnyTemp);
-        displayResults(currentLat, currentLong, closestLat, closestLong, closestPlaceName, closestDistance, closestSunnyTemp);
-    }
-    catch(err) {
-            console.log("Error!");
-        drawErrorMessage();
+
+            console.log("Closest sunny spot: " + closestPlaceName);
+            console.log("Distance: " + closestDistance);
+            console.log("Temp: " + closestSunnyTemp);
+            displayResults(currentLat, currentLong, closestLat, closestLong, closestPlaceName, closestDistance, closestSunnyTemp);
         }
+        catch(err) {
+                console.log("Error!");
+            drawErrorMessage();
+            }
     }
 }
 
 function distanceBetweenCoords(lat1, lon1, lat2, lon2) {
-  var p = 0.017453292519943295;    // Math.PI / 180
-  var c = Math.cos;
-  var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+    var p = 0.017453292519943295;    // Math.PI / 180
+    var c = Math.cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 + 
           c(lat1 * p) * c(lat2 * p) * 
           (1 - c((lon2 - lon1) * p))/2;
 
-  return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+    return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
 }
