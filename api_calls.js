@@ -56,6 +56,7 @@ function listCountryCodes() {
                     'LV': 'Latvia',
                     'MT': 'Malta',
                     'NL': 'Netherlands',
+                    'NO': 'Norway',
                     'PL': 'Poland',
                     'PT': 'Portugal',
                     'RO': 'Romania',
