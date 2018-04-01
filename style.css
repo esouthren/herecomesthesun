@@ -4,17 +4,13 @@
     width: 0%;
 }
 
-
-
-
-
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
     font-family: 'Montserrat';
     background-color: deepskyblue;
-    font-size: 80%;
+    font-size: 90%;
 }
 
 #whiteContainer {
@@ -54,6 +50,14 @@ hr {
     border-radius: 5px;
     width: 95%;
     font-size: 20px;
+    font-family: 'Montserrat';
+}
+
+#countryInput {
+    padding: 7px;
+    border-radius: 5px;
+    width: 95%;
+    font-size: 15px;
     font-family: 'Montserrat';
 }
 

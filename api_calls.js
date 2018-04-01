@@ -19,6 +19,7 @@ function loadInitialElements() {
                         '<tr>' +
                             '<td id="whereAreYouCell">Where Are You?</td>' +
                             '<td id="cityInputCell"><input id="cityInput" type="text" id="myLocation" name="myLocation" /></td>' +
+                            '<td id="cityInputCell"><select id="countryInput" ><option selected value="uk">UK</option>' + listCountryCodes() +        
                         '</tr>' +
                     '</table>' +
                     '<div id="errorNoInputText"></div>' + 
@@ -32,7 +33,47 @@ function loadInitialElements() {
     $("#whiteContainer").html(pageHtmlString);
 }
 
+function listCountryCodes() {
+    var countries = { 'AU': 'Australia', 
+                    'AT': 'Austria',
+                    'BE': 'Belgium',
+                    'BG': 'Bulgaria',
+                    'CY': 'Cyprus',
+                    'CZ': 'Czech Republic',
+                    'DE': 'Germany',
+                    'DK': 'Denmark',
+                    'EE': 'Estonia',
+                    'ES': 'Spain',
+                    'FI': 'Finland',
+                    'FR': 'Spain',
+                    'GR': 'Greece',
+                    'HU': 'Hungary',
+                    'HR': 'Croatia',
+                    'IE': 'Ireland',
+                    'IT': 'Italy',
+                    'LT': 'Lithuania',
+                    'LU': 'Luxembourg',
+                    'LV': 'Latvia',
+                    'MT': 'Malta',
+                    'NL': 'Netherlands',
+                    'PL': 'Poland',
+                    'PT': 'Portugal',
+                    'RO': 'Romania',
+                    'SE': 'Sweden',
+                    'SI': 'Slovenia',
+                    'SK': 'Slovakia',
+                    'US': 'USA'                              
+                    }
+    var countryList = "";
+    for(c in countries) {
+        countryList = countryList + '<option value="' + c + '">' + countries[c] + '</option>';
+    }
+    return countryList;
+}
+
 function apiCallCheckSource(source) {
+    var selectedCountry = $('#countryInput').find('option:selected').val();
+    console.log("Country: " + selectedCountry );
     // Are we calling the weather API with a searched location or current position co-ordinates?
     if(source=="myLocation") {
         var myLocation = $("#cityInput").val();
@@ -41,7 +82,7 @@ function apiCallCheckSource(source) {
            $("#errorNoInputText").html("type a location or try 'Use My Current Location'")
         }
         else {
-            var url = "https://api.openweathermap.org/data/2.5/weather?q=" + myLocation + ",uk"
+            var url = "https://api.openweathermap.org/data/2.5/weather?q=" + myLocation + "," + selectedCountry;
             apiCall(url);
         }
     }    
@@ -94,7 +135,7 @@ function apiCall(url) {
             apiSearchNearbyWeather(myLocationLat, myLocationLong);            
         },
         error: function(err) {
-        $("#errorNoInputText").html("location not found. Is it in the UK?")
+        $("#errorNoInputText").html("location not found. Did you select the correct country?")
         console.log('error:' + err)
         }
     })
