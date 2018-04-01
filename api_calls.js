@@ -62,10 +62,7 @@ function apiCallCheckSource(source) {
         // Browser doesn't support Geolocation
         handleLocationError(false, infoWindow, map.getCenter());
         }
-}
-
-
-    
+}  
 }
     
 
@@ -170,13 +167,47 @@ function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) 
 
 function displayMap(latOne, longOne, latTwo, longTwo) {
     var directionsService = new google.maps.DirectionsService;
-    var directionsDisplay = new google.maps.DirectionsRenderer;
+    var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
     console.log("printing google map...");
-  
+
+    var icons = {
+          start: new google.maps.MarkerImage(
+           // URL
+           'sun.png',
+           // (width,height)
+           new google.maps.Size( 44, 32 ),
+           // The origin point (x,y)
+           new google.maps.Point( 0, 0 ),
+           // The anchor point (x,y)
+           new google.maps.Point( 22, 32 )
+          ),
+          end: new google.maps.MarkerImage(
+           // URL
+           'sun.png',
+           // (width,height)
+           new google.maps.Size( 44, 32 ),
+           // The origin point (x,y)
+           new google.maps.Point( 0, 0 ),
+           // The anchor point (x,y)
+           new google.maps.Point( 22, 32 )
+          )
+     };
+
       var map = new google.maps.Map(document.getElementById('resultMap'), {
         center: {lat: latOne, lng: longOne},
         zoom: 8
+         
       });
+    var marker = new google.maps.Marker({
+    position:{lat: latTwo, lng: longTwo},
+    map: map,
+    title: 'Hello World',
+        icon: 'sunIcon.png'
+        
+    });
+    
+
+    
     directionsDisplay.setMap(map);
     
     directionsService.route({
@@ -185,14 +216,18 @@ function displayMap(latOne, longOne, latTwo, longTwo) {
       travelMode: 'DRIVING'
     }, function(response, status) {
       if (status === 'OK') {
+
         directionsDisplay.setDirections(response);
+          
+        
       } else {
         window.alert('Directions request failed due to ' + status);
       }
     });
 
+
   }
-//$("#resultMap").html("<h1>Map gonna go here!");
+
 
 
 function findNearestSunnySpot(weatherData, currentLat, currentLong) {
