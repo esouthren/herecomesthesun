@@ -13,7 +13,7 @@ function loadInitialElements() {
                     '<div id="errorNoInputText"></div>' + 
                     '<br />' +
                     '<div id="btn" type="button" onClick="apiCallCheckSource(' + '\'myLocation\'' + ')" >Bring Me Sunshine</div>' +
-                    '<br /><br /><hr /> or <hr /><br />' +
+                    '<br /><h3>or</h3><br />' +
                     '<div id="btn" type="button" onClick="apiCallCheckSource(' + '\'googleLocation\'' + ')">Use My Current Location</div>' +
                     '<br /><br />' +
                 '</div>' +
@@ -89,7 +89,7 @@ function apiCall(url) {
             var myLocationLat = data['coord']['lat'];
             var myLocationLong = data['coord']['lon'];
             // Change Page Content to Results
-            var successApiString = '<center><div id="contentContainerInner"><h1>Loading...</h1>' +
+            var successApiString = '<center><div id="contentContainerInner"><br /><br /><br /><br /><h1>Loading...</h1><br /><br />' +
                 '</div><br /><br /></center>';
            //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
             $("#whiteContainer").html(successApiString)
@@ -112,7 +112,7 @@ function apiSearchNearbyWeather(lat, long) {
     // 5 = ~1000
     // 10 = 2500
     // 20 = 5000, around 7 seconds
-    var ZOOM = 15
+    var ZOOM = 15;
     var url = 'https://api.openweathermap.org/data/2.5/box/city?bbox='+
                                                                     (long-ZOOM).toString() +
                                                                     ','+(lat-ZOOM).toString() +','+
@@ -132,15 +132,7 @@ function apiSearchNearbyWeather(lat, long) {
         console.log(data);
         var returnLength = data['list'].length;
         // Call function that finds nearest place with 'Clear' Weather
-        findNearestSunnySpot(data, lat, long);
-        for(var i = 0; i < returnLength; i++) {
-            //console.log(i + ': ' + data['list'][i]['weather'][0]['main']);
-            pointsToMap.push([data['list'][i]['coord']['Lat'],data['list'][i]['coord']['Long']])
-        }
-        //displayMap(pointsToMap);
-    
-    
-        
+        findNearestSunnySpot(data, lat, long);        
     },
     error: function(err) {
     $("#errorNoInputText").html("location not found. Is it in the UK?")
@@ -166,8 +158,8 @@ function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) 
                 '</div>' +
                 '<div style="height: 400px; width: 100%;"><div id="resultMap">Map go here</div></div>' +
                 '<br /><div id="btn" type="button" onclick="location.href=\'' + googleMapsUrl + '\';">Get Me There</div>' +
-                '<br /><div id="btn" type="button" onClick="loadInitialElements()">Back to Home</div><br />' +
-                '<br /><br /></center>';
+                '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
+                '<br /><br /></center></div>';
            //$("#weatherUpdate").html(data['name'] + ": " + weatherAtLocation);
             $("#whiteContainer").html(successApiString)
             displayMap(latOne, longOne, latTwo, longTwo);
@@ -213,36 +205,41 @@ function findNearestSunnySpot(weatherData, currentLat, currentLong) {
         }
     }
     console.log("array of index elements: " + clearSpotsArray);
-    
-    console.log("first element: " + weatherData['list'][clearSpotsArray[0]]['name']);
-    var closestSunnySpot = clearSpotsArray[0]['name'];
-    
-    var closestDistance = distanceBetweenCoords(currentLat, currentLong, weatherData['list'][clearSpotsArray[0]]['coord']['Lat'],weatherData['list'][clearSpotsArray[0]]['coord']['Lon'])
-    for(i in clearSpotsArray) {
-        //console.log("i: " + clearSpotsArray[i]);
-        var latTwo = weatherData['list'][clearSpotsArray[i]]['coord']['Lat'];
-        //console.log("latTwo: " + latTwo);
-        var longTwo = weatherData['list'][clearSpotsArray[i]]['coord']['Lon'];
-        var newDistance = distanceBetweenCoords(currentLat, currentLong, latTwo, longTwo);
-        
-        if (newDistance < closestDistance){
-            console.log("New Closest distance!");
-            console.log(i + ": Place: " + weatherData['list'][clearSpotsArray[i]]['name'] + " Distance: " + newDistance.toFixed(2));
-            closestSunnySpot = i;
-            closestDistace = newDistance;            
-        }
-        
+    if(clearSpotsArray.length < 1) {
+        var failedSearchString = '<center><div id="contentcontainerInner"><h2>Search Error</h2>' +
+            '<h4>There\'s just no sunshine anywhere today :( </h4></div>' +
+            '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
+                '<br /><br /></center>';
+            $("#whiteContainer").html(failedSearchString);
     }
-    console.log("closest index: " + closestSunnySpot);
-    console.log("this is...: " + weatherData['list'][clearSpotsArray[closestSunnySpot]]['name']);
-    var closestPlaceName = weatherData['list'][clearSpotsArray[closestSunnySpot]]['name'];
-    var closestLat = weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lat'];
-    var closestLong =  weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lon'];
-    var closestSunnyTemp = weatherData['list'][clearSpotsArray[closestSunnySpot]]['main']['temp_max'];
-    console.log("Closest sunny spot: " + closestPlaceName);
-    console.log("Distance: " + closestDistance);
-    console.log("Temp: " + closestSunnyTemp);
-    displayResults(currentLat, currentLong, closestLat, closestLong, closestPlaceName, closestDistance, closestSunnyTemp);
+    else {
+    
+        
+        var closestSunnySpot = clearSpotsArray[0]['name'];
+
+        var closestDistance = distanceBetweenCoords(currentLat, currentLong, weatherData['list'][clearSpotsArray[0]]['coord']['Lat'],weatherData['list'][clearSpotsArray[0]]['coord']['Lon'])
+        for(i in clearSpotsArray) {
+            //console.log("i: " + clearSpotsArray[i]);
+            var latTwo = weatherData['list'][clearSpotsArray[i]]['coord']['Lat'];
+            //console.log("latTwo: " + latTwo);
+            var longTwo = weatherData['list'][clearSpotsArray[i]]['coord']['Lon'];
+            var newDistance = distanceBetweenCoords(currentLat, currentLong, latTwo, longTwo);
+
+            if (newDistance < closestDistance){
+                closestSunnySpot = i;
+                closestDistace = newDistance;            
+            }
+
+        }
+        var closestPlaceName = weatherData['list'][clearSpotsArray[closestSunnySpot]]['name'];
+        var closestLat = weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lat'];
+        var closestLong =  weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lon'];
+        var closestSunnyTemp = weatherData['list'][clearSpotsArray[closestSunnySpot]]['main']['temp_max'];
+        console.log("Closest sunny spot: " + closestPlaceName);
+        console.log("Distance: " + closestDistance);
+        console.log("Temp: " + closestSunnyTemp);
+        displayResults(currentLat, currentLong, closestLat, closestLong, closestPlaceName, closestDistance, closestSunnyTemp);
+    }
 }
 
 function distanceBetweenCoords(lat1, lon1, lat2, lon2) {

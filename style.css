@@ -1,5 +1,3 @@
-  /* Always set the map height explicitly to define the size of the div
-   * element that contains the map. */
 
 #map {
     height: 0%;
@@ -16,7 +14,7 @@ html, body {
 
 #whiteContainer {
     width: 100%;
-    #border-radius: 5px;
+
     position: absolute;
     
     
@@ -24,7 +22,7 @@ html, body {
 }
 
 #contentContainerInner {
-    width: 80%;
+    width: 95%;
 }
 
 hr {
@@ -32,7 +30,7 @@ hr {
 }
 
 #btn {
-    width: 95%;
+    width: 90%;
     background-color: orange;
     padding: 10px;
     border-radius: 5px;
@@ -40,6 +38,7 @@ hr {
 
 #btn:hover {
     background-color: darkorange;
+    cursor: pointer;
 }
 
 #errorNoInputText {
@@ -57,13 +56,15 @@ hr {
 }
 
 #whereAreYouTable {
-   
+    width: 95%;
 
 }
 
 #whereAreYouCell {
- display: inline;
+
     min-width: 100px;
+    vertical-align: middle;
+
     
 }
 
@@ -75,4 +76,17 @@ hr {
 #resultMap {
     height: 100%;
     width: 100%;
+}
+
+@media only screen and (min-width: 500px) {
+    /* Settings for things larger than phones */
+    #btn {
+        width: 30%;
+
+    }
+    
+    #whereAreYouTable {
+    width: 33%;
+
+}
 }
