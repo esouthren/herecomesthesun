@@ -228,7 +228,13 @@ function displayMap(latOne, longOne, latTwo, longTwo) {
 
   }
 
-
+function drawErrorMessage() {
+            var failedSearchString = '<center><div id="contentcontainerInner"><h2>Search Error</h2>' +
+            '<h4>There\'s just no sunshine anywhere today :( </h4></div>' +
+            '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
+                '<br /><br /></center>';
+            $("#whiteContainer").html(failedSearchString);
+}
 
 function findNearestSunnySpot(weatherData, currentLat, currentLong) {
     var clearSpotsArray = [];
@@ -244,17 +250,14 @@ function findNearestSunnySpot(weatherData, currentLat, currentLong) {
     }
     
     if(clearSpotsArray.length < 1) {
-        var failedSearchString = '<center><div id="contentcontainerInner"><h2>Search Error</h2>' +
-            '<h4>There\'s just no sunshine anywhere today :( </h4></div>' +
-            '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
-                '<br /><br /></center>';
-            $("#whiteContainer").html(failedSearchString);
+        drawErrorMessage();
+
     }
     else {
     
         
         var closestSunnySpot = clearSpotsArray[0]['name'];
-
+        
         var closestDistance = distanceBetweenCoords(currentLat, currentLong, weatherData['list'][clearSpotsArray[0]]['coord']['Lat'],weatherData['list'][clearSpotsArray[0]]['coord']['Lon'])
         for(i in clearSpotsArray) {
             //console.log("i: " + clearSpotsArray[i]);
@@ -269,14 +272,22 @@ function findNearestSunnySpot(weatherData, currentLat, currentLong) {
             }
 
         }
+        try {
         var closestPlaceName = weatherData['list'][clearSpotsArray[closestSunnySpot]]['name'];
         var closestLat = weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lat'];
         var closestLong =  weatherData['list'][clearSpotsArray[closestSunnySpot]]['coord']['Lon'];
         var closestSunnyTemp = weatherData['list'][clearSpotsArray[closestSunnySpot]]['main']['temp_max'];
+        
+
         console.log("Closest sunny spot: " + closestPlaceName);
         console.log("Distance: " + closestDistance);
         console.log("Temp: " + closestSunnyTemp);
         displayResults(currentLat, currentLong, closestLat, closestLong, closestPlaceName, closestDistance, closestSunnyTemp);
+    }
+    catch(err) {
+            console.log("Error!");
+        drawErrorMessage();
+        }
     }
 }
 
