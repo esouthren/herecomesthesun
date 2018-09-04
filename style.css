@@ -1,7 +1,12 @@
-
+    
 #map {
     height: 0%;
     width: 0%;
+}
+
+a {
+    color:aliceblue;
+    text-decoration: none;
 }
 
 html, body {
@@ -11,6 +16,14 @@ html, body {
     font-family: 'Montserrat';
     background-color: deepskyblue;
     font-size: 90%;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+        color:skyblue; 
+    padding: 0.5em;
 }
 
 #whiteContainer {

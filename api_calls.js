@@ -10,6 +10,10 @@ For M x
 
 */
 
+var footerCode = '<div id="footer">' + 
+                    'Created by <a href="https://esouthren.github.io/okayestcoder/index.html" target="_blank">the Okay-est Coder</a> | <a href="#" onClick="displayAboutPage()">About</a>' +
+                '</div>';
+
 function loadInitialElements() {
     // The initial HTML of the homepage
     var pageHtmlString = '<center>' +
@@ -29,8 +33,23 @@ function loadInitialElements() {
                     '<div id="btn" type="button" onClick="apiCallCheckSource(' + '\'googleLocation\'' + ')">Use My Current Location</div>' +
                     '<br /><br />' +
                 '</div>' +
-            '</center>';
+            '</center>' + footerCode;
+
     $("#whiteContainer").html(pageHtmlString);
+}
+
+function displayAboutPage() {
+    console.log("clicked!");
+    // About information
+    var pageHtmlString = '<center>' +
+        '<h1>About</h1>' +
+                 '<div id="contentContainerInner">' +
+        '<p style="width: 10%"><h3>It all started with bad British weather and a small request:<br /><br /> "Let\'s drive to the nearest place that has sun. How do we get there?"' +
+        '<br /><br />This one is for you, M.</p></h3>' +
+         '<br /><div id="btn" type="button" onClick="loadInitialElements()">Return</div><br /><br /></center>' +
+               footerCode;
+   $("#whiteContainer").html(pageHtmlString);
+        
 }
 
 function listCountryCodes() {
@@ -148,7 +167,7 @@ function apiSearchNearbyWeather(lat, long) {
     // 5 = ~1000
     // 10 = 2500
     // 20 = 5000, around 7 seconds
-    var ZOOM = 3;
+    var ZOOM = 5;
     var url = 'https://api.openweathermap.org/data/2.5/box/city?bbox='+
                                                                     (long-ZOOM).toString() +
                                                                     ','+(lat-ZOOM).toString() +','+
@@ -171,7 +190,7 @@ function apiSearchNearbyWeather(lat, long) {
         findNearestSunnySpot(data, lat, long);        
     },
         error: function(err) {
-            $("#errorNoInputText").html("location not found. Is it in the UK?")
+            $("#errorNoInputText").html("location not found!")
             console.log('error:' + err)
         }
     })
@@ -192,15 +211,15 @@ function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) 
     var items = ['Taps Aff In', 'Sun\'s Out In', 'Head To', 'Clear Skies In', 'It\'s Marvellous In', 'It\'s Bloomin\' Lovely In', 'There\'s Blue Skies In', 'Get Yourself To','Pack Your Bags And Head To'];
     introString = items[Math.floor(Math.random()*items.length)]
     // Create Google Maps directions URL
-    var googleMapsUrl = "https://www.google.com/maps/dir/?api=1&origin=" + latOne + "," + longOne + "&destination=" + latTwo + "," + longTwo;
+    var googleMapsUrl = "https://www.google.com/maps/dir/?api=AIzaSyCUcRPmATgHxiqnPSOyBBk2a0SyxVICdlg&origin=" + latOne + "," + longOne + "&destination=" + latTwo + "," + longTwo;
     
     var successApiString = '<center><div id="contentContainerInner"><h1>' + introString + ' ' + name + '</h1>' +
                 '<h4>Distance: ' + distance.toFixed(2) + 'km\tMax Temp: ' + temp.toFixed(2) + 'C</h4>' +
                 '</div>' +
                 '<div style="height: 300px; width: 100%;"><div id="resultMap">Map go here</div></div>' +
                 '<br /><div id="btn" type="button" target="_blank" onclick="window.open(\'' + googleMapsUrl + '\',\'_blank\');">Take Me There</div>' +
-                '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
-                '<br /><br /></center></div>';
+                '<br /><div id="btn" type="button" onClick="loadInitialElements()">Search Again</div><br />' +
+                '<br /><br /></center></div>' + footerCode;
     
     $("#whiteContainer").html(successApiString)
     displayMap(latOne, longOne, latTwo, longTwo);
@@ -238,13 +257,7 @@ function displayMap(latOne, longOne, latTwo, longTwo) {
     });
 }
 
-function drawErrorMessage() {
-    var failedSearchString = '<center><div id="contentcontainerInner"><h2>Search Error</h2>' +
-    '<h4>There\'s just no sunshine anywhere today :( </h4></div>' +
-    '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
-        '<br /><br /></center>';
-    $("#whiteContainer").html(failedSearchString);
-}
+
 
 function findNearestSunnySpot(weatherData, currentLat, currentLong) {
     // Find all the sunny spots, then find the nearest one
@@ -269,8 +282,9 @@ function findNearestSunnySpot(weatherData, currentLat, currentLong) {
             var newDistance = distanceBetweenCoords(currentLat, currentLong, latTwo, longTwo);
 
             if (newDistance < closestDistance) {
+                console.log("new closer spot: " + weatherData['list'][clearSpotsArray[i]]['name'] + " distance: " + newDistance);
                 closestSunnySpot = i;
-                closestDistace = newDistance;            
+                closestDistance = newDistance;            
             }
 
         }
@@ -291,6 +305,14 @@ function findNearestSunnySpot(weatherData, currentLat, currentLong) {
             drawErrorMessage();
             }
     }
+}
+
+function drawErrorMessage() {
+    var failedSearchString = '<center><div id="contentcontainerInner"><h2>Search Error</h2>' +
+    '<h4>There\'s just no sunshine anywhere today :( </h4></div>' +
+    '<br /><div id="btn" type="button" onClick="loadInitialElements()">Home</div><br />' +
+        '<br /><br /></center>';
+    $("#whiteContainer").html(failedSearchString);
 }
 
 function distanceBetweenCoords(lat1, lon1, lat2, lon2) {
