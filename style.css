@@ -24,6 +24,7 @@ html, body {
     width: 100%;
         color:skyblue; 
     padding: 0.5em;
+      background-color: deepskyblue;
 }
 
 #whiteContainer {

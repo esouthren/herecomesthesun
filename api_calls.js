@@ -10,10 +10,6 @@ For M x
 
 */
 
-var footerCode = '<div id="footer">' + 
-                    'Created by <a href="https://esouthren.github.io/okayestcoder/index.html" target="_blank">the Okay-est Coder</a> | <a href="#" onClick="displayAboutPage()">About</a>' +
-                '</div>';
-
 function loadInitialElements() {
     // The initial HTML of the homepage
     var pageHtmlString = '<center>' +
@@ -34,9 +30,12 @@ function loadInitialElements() {
                     '<br /><br />' +
                 '</div>' +
             '</center>' + footerCode;
-
     $("#whiteContainer").html(pageHtmlString);
 }
+
+var footerCode = '<div id="footer">' + 
+                    'Created by <a href="https://esouthren.github.io/okayestcoder/index.html" target="_blank">the Okay-est Coder</a> | <a href="#" onClick="displayAboutPage()">About</a>' +
+                '</div>';
 
 function displayAboutPage() {
     console.log("clicked!");
