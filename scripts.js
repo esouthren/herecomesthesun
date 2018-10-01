@@ -13,6 +13,7 @@ For M x
 function loadHomepage() {
     var pageHtmlString = '<center>' +
                 '<h1>Here Comes The Sun </h1>' +
+                '<h3>How far away is the nearest sunshine... And how do I get there?</h3><br />' +
                 '<div id="contentContainerInner">' +
                     '<table id="whereAreYouTable">' +
                         '<tr>' +
