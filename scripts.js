@@ -258,7 +258,7 @@ function displayResults(latOne, longOne, latTwo, longTwo, name, distance, temp) 
     var items = ['Taps Aff In', 'Sun\'s Out In', 'Head To', 'Clear Skies In', 'It\'s Marvellous In', 'It\'s Bloomin\' Lovely In', 'There\'s Blue Skies In', 'Get Yourself To','Pack Your Bags And Head To'];
     introString = items[Math.floor(Math.random()*items.length)];
     // Create Google Maps directions URL
-    var googleMapsUrl = "https://www.google.com/maps/dir/?api=AIzaSyCUcRPmATgHxiqnPSOyBBk2a0SyxVICdlg&origin=" + latOne + "," + longOne + "&destination=" + latTwo + "," + longTwo;
+    var googleMapsUrl = "https://www.google.com/maps/dir/?api=AIzaSyCundqnc0BKJCsiZHYjzzSq-V4sia_mvVw&origin=" + latOne + "," + longOne + "&destination=" + latTwo + "," + longTwo;
     
     var successApiString = '<center>' + 
                                 '<div id="contentContainerInner">' + 
