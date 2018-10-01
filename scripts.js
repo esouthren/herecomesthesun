@@ -23,7 +23,7 @@ function loadHomepage() {
                     '</table>' +
                     '<div id="errorNoInputText"></div>' + 
                     '<br />' +
-                    '<div id="btn" type="button" onClick="apiCallCheckSource(' + '\'userSelectedLocation\'' + ')" >Bring Me Sunshine</div>' +
+                    '<div id="btn" type="buttorrn" onClick="apiCallCheckSource(' + '\'userSelectedLocation\'' + ')" >Bring Me Sunshine</div>' +
                     '<br /><h3>or</h3><br />' +
                     '<div id="btn" type="button" onClick="apiCallCheckSource(' + '\'currentLocation\'' + ')">Use My Current Location</div>' +
                     '<br /><br />' +
@@ -225,7 +225,7 @@ function drawErrorMessage() {
     var failedSearchString = '<center>' + 
                                 '<div id="contentcontainerInner">' + 
                                     '<h2>Search Error</h2>' +
-                                    '<h4>There\'s just no sunshine anywhere today :( </h4>'
+                                    '<h4>There\'s just no sunshine anywhere today :( </h4>' +
                                 '</div>' +
                                 '<br />' + 
                                 '<div id="btn" type="button" onClick="loadHomepage()">Home</div>' + 
