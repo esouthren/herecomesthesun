@@ -17,7 +17,7 @@ function loadHomepage() {
                 '<div id="contentContainerInner">' +
                     '<table id="whereAreYouTable">' +
                         '<tr>' +
-                            '<td id="whereAreYouCell">Where Are You?</td>' +
+                            '<td id="whereAreYouCell">Where are You?</td>' +
                             '<td id="cityInputCell"><input id="cityInput" type="text" id="myLocation" name="myLocation" /></td>' +
                             '<td id="cityInputCell"><select id="countryInput"><option selected value="uk">UK</option>' + listCountryCodes() + '</td>' +        
                         '</tr>' +
